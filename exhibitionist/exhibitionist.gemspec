@@ -6,12 +6,12 @@ require 'exhibitionist/version'
 Gem::Specification.new do |spec|
   spec.name          = "exhibitionist"
   spec.version       = Exhibitionist::VERSION
-  spec.authors       = ["authorbeard"]
-  spec.email         = ["msnolan@gmail.com"]
+  spec.authors       = ["Michael Nolan"]
+  spec.email         = ["confusedbysoup@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{A CLI tool for getting art exhibits around NYC}
+  spec.description   = %q{Exhibitionist grabs exhibit details from NYC's art museums to let you see what's on exhibit (and, eventually, what's coming up.)}
+  spec.homepage      = "https://github.com/authorbeard/exhibitionist-cli-gem"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
@@ -30,4 +30,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "pry"
+
+  spec.add_dependency "nokogiri"
+  
 end
