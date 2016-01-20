@@ -1,52 +1,57 @@
 class ExhibitionistCli
 
   def initialize
+    system("clear")
     puts "Hello. Which exhibits would you like me to fetch?\n\n"
     top_menu
 
   end
 
   def top_menu
-    puts "1. What's on at your favorite museum"
-    puts "2. Top exhibits open right now"
-    puts "3. All exhibits open right now"
+    
+    puts "1. test the Brooklyn method."
+    # puts "2. Top exhibits open right now"
+    # puts "3. All exhibits open right now"
     puts "And type q at any time to quit."
     input = gets.strip
       case input
       when "1"
-        puts "We got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        puts "(type Brooklyn, Guggenheim or Met)"
-        museum = gets.strip.downcase
-          case museum
-          when "brooklyn"
+        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
+        # puts "(type Brooklyn, Guggenheim or Met)"
+        # museum = gets.strip.downcase
+        #   case museum
+        #   when "brooklyn"
             fetching_message
-
+            Scraper.new.bklyn
+            Museum.new(@bklyn)
+            puts "next I'll do Museum.new(bklyn)\n\n"
+            sleep 2
             top_menu
 
-          when "guggenheim"
-            fetching_message
-            top_menu
+          # when "guggenheim"
+          #   fetching_message
+          #   top_menu
 
-          when "met"
-            fetching_message
-            top_menu
+          # when "met"
+          #   fetching_message
+          #   top_menu
 
-          else
-            puts "I didn't get that. Let's try again"
-            sleep 1
-            top_menu
+          # end
 
-          end
+      # when "2"
+      #   under_construction
 
-      when "2"
-        under_construction
-
-      when "3"
-        under_construction
+      # when "3"
+      #   under_construction
 
       when "q"
-          farewell
+        farewell
 
+      else
+        puts "I didn't get that. Let's try again"
+        sleep 1
+        system("clear")
+        top_menu
       end
 
   end
@@ -61,13 +66,13 @@ class ExhibitionistCli
 
 
   def fetching_message
-    puts "Getting your exhibits now. This might take a second."
+    puts "\nGetting your exhibits now. This might take a second.\n"
   end
 
   def farewell
     system("clear")
     puts "Fine. Go watch TV or get drunk, you philistine.\n\n"
-    sleep 1
+    # sleep 1
   end
 
   def under_construction
@@ -78,6 +83,7 @@ class ExhibitionistCli
         %x`open -a Safari http://www.dogsplayingpoker.org/gallery/coolidge/img/a_friend_in_need.jpg`
       else
         puts "Okay, check back later."
+        sleep 1
         top_menu
       end
   end
