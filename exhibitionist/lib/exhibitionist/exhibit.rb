@@ -7,9 +7,10 @@ class Exhibit
 
 def initialize(hash, location)
   @location = location
-  ##mass assignment
+  hash.each{|k, v| self.send(("#{k}="), v)}
 
   self.save
+  binding.pry
 
 end
 

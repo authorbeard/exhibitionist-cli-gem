@@ -22,9 +22,10 @@ class ExhibitionistCli
         #   case museum
         #   when "brooklyn"
             fetching_message
-            Museum.new(Scraper.new.bklyn, input)
+            input = Museum.new(Scraper.new.bklyn, input)
+            input.display_exhibits(@exhibits)
+              ##when have other options, add "brooklyn="
             # Museum.new(@bklyn)
-            puts "next I'll do Museum.new(bklyn)\n\n"
             # sleep 2
             # top_menu
 

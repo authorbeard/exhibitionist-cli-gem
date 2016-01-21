@@ -10,7 +10,11 @@ class Scraper
 ### 
 
   def bklyn
-    doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
+    # doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
+    # test_html = File.read("resources/bk.html")
+    doc = Nokogiri::HTML(open("resources/bk.html")).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
+
+# binding.pry
     doc.collect {|ex| 
       {
     :url => ex.at("a")["href"],
@@ -63,3 +67,5 @@ BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
 # 2) add'l museums
 # 3) way to list museums by borough
 # 4) way to display exhibits by borough
+
+

@@ -9,7 +9,6 @@ module Exhibitionist
   require_relative "./exhibitionist/museum"
   require_relative "./exhibitionist/exhibit"
   require_relative "./exhibitionist/cli.rb"
-
   
   
 end
