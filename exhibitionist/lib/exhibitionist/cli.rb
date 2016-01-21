@@ -24,17 +24,22 @@ class ExhibitionistCli
             fetching_message
             input = Museum.new(Scraper.new.bklyn, input)
             input.display_exhibits(@exhibits)
-              ##when have other options, add "brooklyn="
-            # Museum.new(@bklyn)
+
+              
+            
             # sleep 2
             # top_menu
 
           # when "guggenheim"
           #   fetching_message
-          #   top_menu
+          #   input = Museum.new(Scraper.new.gugg, input)
+            # input.display_exhibits(@exhibits)
+              # top_menu
 
           # when "met"
           #   fetching_message
+              # input = Museum.new(Scraper.new.the_met, input)
+              # input.display_exhibits(@exhibits)
           #   top_menu
 
           # end

@@ -2,6 +2,5 @@
 
 require_relative '../lib/exhibitionist'
 
-puts "so it's evaluating this line"
 
 ExhibitionistCli.new

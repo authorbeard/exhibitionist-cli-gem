@@ -12,28 +12,46 @@ class Scraper
   def bklyn
     # doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
     # test_html = File.read("resources/bk.html")
-    doc = Nokogiri::HTML(open("resources/bk.html")).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
+    bk_doc = Nokogiri::HTML(open("resources/bk.html")).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
 
 # binding.pry
-    doc.collect {|ex| 
+    bk_doc.collect {|ex| 
       {
     :url => ex.at("a")["href"],
     :title => ex.css("h2").text,
     :date => ex.css("h4").text.gsub(/\n( +)?/, "")
     }
     }
-    # @bklyn_current
-    ## This builds an array of the current exhibitions. Now Museum needs to 
-# binding.pry
-    ## I can have CLI pass this directly into Museum.new along with name = input.
+    
   end
 
   def gugg
-    gugg = Nokogiri::HTML(open(GUGG)).css(".row-with-pic")
+    gugg_doc = Nokogiri::HTML(open("resources/gugg.html")).css(".row-with-pic")
+    
+    gugg_doc.collect {|ex|
+      {
+        :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", ##Guggs just appends something, so I need to build that in
+        :title => ex.css("h4").text,
+        :date => ex.css(".exh-dateline").text, 
+        :ongoing_date => ex.css(".row-text strong").text,
+        :online_date => ex.css(".offsite").text
+      }
+    }
+        # if :date.empty? 
+        #   if :special_date.empty?
+        #     :date = :online_date
+        #   else
+        #     :date = :special_date
+        #   end
+        # end
+        # }
+  
+  # binding.pry
+
   end
 
   def the_met
-    the_met = Nokogiri::HTML(open(MET))##NEED TO SELECT 2 TYPES
+    the_met = Nokogiri::HTML(open(MET_URL))##NEED TO SELECT 2 TYPES
   end
 
 ### DETAIL SCRAPERS ###
@@ -47,12 +65,15 @@ end
 
 ## 1) MAIN EXHIBIT SCRAPER FOR EACH MUSEUM 
 BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
+GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
+MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
 # 2) DETAIL EXHIBIT SCRAPER FOR EACH MUSEUM
 ##   --feed @url for each listing to the scraper
-    def get_detail(exhibit)
-      @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
-      puts @desc.gsub(/\s{2,10}/, "\n\n")
-    end
+    # def get_detail(exhibit)
+    #   @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
+    #   puts @desc.gsub(/\s{2,10}/, "\n\n")
+    #   ##CAN ATTACH GSUB TO SCRAPER, WILL PUTS CORRECTLY##
+    # end
 
 # 3) (FUTURE FUNCTIONALITY: ADD'L SCRAPERS FOR UPCOMING, ETC.)
 

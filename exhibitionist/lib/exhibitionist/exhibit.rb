@@ -17,6 +17,7 @@ class Exhibit
 
 
   def description=(doc)
+    ## --SEE SCRAPER NOTES FOR APPROPRIATE SCRAPING, FORMATTING URL, CSS & REGEXP
     ## --parses results of detail scrape
     ## --assigns appropriate text to @description
     ## --creates @detail_title, hands that on:
@@ -29,7 +30,10 @@ class Exhibit
 
   end
 
-
+  def get_detail(exhibit)
+    @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
+      puts @desc.gsub(/\s{2,10}/, "\n\n")
+  end
 
 
 

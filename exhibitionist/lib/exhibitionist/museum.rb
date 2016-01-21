@@ -42,7 +42,10 @@ class Museum
   end
 
   def self.list_museums
-    @@all.collect{|m| m.name} 
+    mus_array = []
+    @@all.each_with_index{|m, i| 
+      mus_array << "#{i+1}. #{m.name} Museum"}
+    puts mus_array 
   end
 
 
