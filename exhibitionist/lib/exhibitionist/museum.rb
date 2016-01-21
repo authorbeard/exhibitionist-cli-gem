@@ -7,10 +7,10 @@ class Museum
     @name = name
     @exhibits = array
     self.save
-    sleep 1
-
-  binding.pry
-
+    # sleep 1
+  # binding.pry
+    build_exhibits(@exhibits)
+  # binding.pry
 
   end
 
@@ -25,11 +25,9 @@ class Museum
   end
 
 
-  def build_exhibits(hash)
-    hash.each{|ex|
-
-
-
+  def build_exhibits(exhibit_array)
+    exhibit_array.each{|ex| 
+      Exhibit.new(ex, self)
     }
 
 

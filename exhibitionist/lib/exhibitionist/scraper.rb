@@ -49,6 +49,11 @@ end
 BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
 # 2) DETAIL EXHIBIT SCRAPER FOR EACH MUSEUM
 ##   --feed @url for each listing to the scraper
+    def get_detail(exhibit)
+      @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
+      puts @desc.gsub(/\s{2,10}/, "\n\n")
+    end
+
 # 3) (FUTURE FUNCTIONALITY: ADD'L SCRAPERS FOR UPCOMING, ETC.)
 
 
