@@ -10,9 +10,18 @@ class Scraper
 ### 
 
   def bklyn
-    @bklyn = Nokogiri::HTML(open(BKLYN_URL)).css("h2 a")
-    
+    doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
+    doc.collect {|ex| 
+      {
+    :url => ex.at("a")["href"],
+    :title => ex.css("h2").text,
+    :date => ex.css("h4").text.gsub(/\n( +)?/, "")
+    }
+    }
+    # @bklyn_current
+    ## This builds an array of the current exhibitions. Now Museum needs to 
 # binding.pry
+    ## I can have CLI pass this directly into Museum.new along with name = input.
   end
 
   def gugg
@@ -35,6 +44,7 @@ end
 ## 1) MAIN EXHIBIT SCRAPER FOR EACH MUSEUM 
 BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
 # 2) DETAIL EXHIBIT SCRAPER FOR EACH MUSEUM
+##   --feed @url for each listing to the scraper
 # 3) (FUTURE FUNCTIONALITY: ADD'L SCRAPERS FOR UPCOMING, ETC.)
 
 

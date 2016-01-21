@@ -22,11 +22,11 @@ class ExhibitionistCli
         #   case museum
         #   when "brooklyn"
             fetching_message
-            Scraper.new.bklyn
-            Museum.new(@bklyn)
+            Museum.new(Scraper.new.bklyn, input)
+            # Museum.new(@bklyn)
             puts "next I'll do Museum.new(bklyn)\n\n"
-            sleep 2
-            top_menu
+            # sleep 2
+            # top_menu
 
           # when "guggenheim"
           #   fetching_message
