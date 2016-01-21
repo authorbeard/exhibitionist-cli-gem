@@ -73,9 +73,7 @@ end
 ### SCRAPERS ####
 
 ## 1) MAIN EXHIBIT SCRAPER FOR EACH MUSEUM 
-BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
-GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
-MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
+
 # 2) DETAIL EXHIBIT SCRAPER FOR EACH MUSEUM
 ##   --feed @url for each listing to the scraper
     # def get_detail(exhibit)
@@ -86,14 +84,20 @@ MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
 
 # 3) (FUTURE FUNCTIONALITY: ADD'L SCRAPERS FOR UPCOMING, ETC.)
 
+####CSS notes for Exhibit details:
+##BKLYN: @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+    #   -- can just call puts on the above, drop the symbol
+ 
 
 
 
 
 #### CONSTANTS ####
+## Main Library Exhibits URL
+BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
+GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
+MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
 
-# 1) MAIN LIBRARY EXHIBIT URLS
-# 2) LIBRARY EXHIBIT DETAIL URLS
 
 
 ####  FUTURE FUNCTIONALITY ####

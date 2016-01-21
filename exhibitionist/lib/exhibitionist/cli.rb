@@ -1,14 +1,14 @@
 class ExhibitionistCli
+  attr_reader :museum
 
   def initialize
-    system("clear")
-    puts "Hello. Which exhibits would you like me to fetch?\n\n"
     top_menu
-
   end
 
   def top_menu
     
+    system("clear")
+    puts "Hello. Which exhibits would you like me to fetch?\n\n"
     puts "1. test the Brooklyn method."
     # puts "2. Top exhibits open right now"
     # puts "3. All exhibits open right now"
@@ -22,8 +22,9 @@ class ExhibitionistCli
         #   case museum
         #   when "brooklyn"
             fetching_message
-            input = Museum.new(Scraper.new.bklyn, input)
-            input.display_exhibits(@exhibits)
+            @museum = Museum.new(Scraper.new.bklyn, input)
+            @museum.display_exhibits(@exhibits)
+            detail_menu
 
               
             
@@ -54,25 +55,51 @@ class ExhibitionistCli
         farewell
 
       else
-        puts "I didn't get that. Let's try again"
-        sleep 1
-        system("clear")
-        top_menu
+        huh?
       end
 
   end
 
 
   def detail_menu
-    puts "at some point, you'll be able to select an exhibit from here to get its details"
-    # --This needs to be dynamic, but since display will be each_with_index (probs)
-    #   can prob just use "input.to_i" and feed that back into whatever array is used to 
-    #   generate the display options
+    puts "\n\nEnter a number to fetch a detailed description.\n\n"
+    puts "Or:"
+    puts "--m for the main menu"
+    puts "--q to quit"
+    input = gets.strip.downcase
+# binding.pry
+      case input.to_i
+      when 0 
+        if input == "m"
+          top_menu
+        elsif input == "q"
+          farewell
+        else
+          huh?
+        end
+      else
+        url = @museum.exhibits[input.to_i - 1][:url] 
+        ## Need to match this to the right detail scraper.
+        puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+         
+# binding.pry
+        puts "Now I'll take #{input} and use it to call on a url."
+      end
+    # at present, Exhibit.list_all just displays a hash of strings.
+    # but the input here should be able to refer to an exhibit in the Exhibit
+    # @@all array, grab that url, and feed it to the detail scraper
   end
 
 
   def fetching_message
     puts "\nGetting your exhibits now. This might take a second.\n"
+  end
+
+  def huh?
+    puts "I didn't get that. Let's try again"
+    sleep 1
+    system("clear")
+    top_menu
   end
 
   def farewell

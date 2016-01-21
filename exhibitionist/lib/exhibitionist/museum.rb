@@ -3,6 +3,12 @@ class Museum
 
   @@all = []
 
+=begin
+TODO:
+1) associate museum exibits with exhibit objects (prob in build_exhibits)
+ 
+=end
+
   def initialize(array, name)
     @name = name
     @exhibits = array
