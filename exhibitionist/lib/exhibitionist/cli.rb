@@ -1,5 +1,5 @@
 class ExhibitionistCli
-  attr_reader :museum
+  attr_reader :museum, :id
 
   def initialize
     top_menu
@@ -21,8 +21,9 @@ class ExhibitionistCli
         # museum = gets.strip.downcase
         #   case museum
         #   when "brooklyn"
+            @id = "bklyn"
             fetching_message
-            @museum = Museum.new(Scraper.new.bklyn, input)
+            @museum = Museum.new(Scraper.new.bklyn, @id)
             @museum.display_exhibits(@exhibits)
             detail_menu
 
@@ -81,13 +82,36 @@ class ExhibitionistCli
         url = @museum.exhibits[input.to_i - 1][:url] 
         ## Need to match this to the right detail scraper.
         puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
-         
+        go_back         
 # binding.pry
-        puts "Now I'll take #{input} and use it to call on a url."
+        
+
+
       end
     # at present, Exhibit.list_all just displays a hash of strings.
     # but the input here should be able to refer to an exhibit in the Exhibit
     # @@all array, grab that url, and feed it to the detail scraper
+  end
+
+  def go_back
+    puts "\n\nWhat now?"
+    puts "--b to go back to the list"
+    puts "--m for main menue"
+    puts "--q to quit"
+    what_now = gets.strip.downcase
+      case what_now 
+      when "b"
+        @museum.display_exhibits(@exhibits)
+        detail_menu
+      when "m"
+        top_menu
+      when "q"
+        farewell
+      else
+        huh?
+        go_back
+      end
+
   end
 
 
