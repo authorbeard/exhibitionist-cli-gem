@@ -11,7 +11,7 @@ class Exhibit
     hash.each{|k, v| self.send(("#{k}="), v)}
 
     self.save
-  binding.pry
+  # binding.pry
 
   end
 

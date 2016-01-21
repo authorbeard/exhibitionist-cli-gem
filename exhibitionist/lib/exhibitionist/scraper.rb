@@ -28,7 +28,7 @@ class Scraper
   def gugg
     gugg_doc = Nokogiri::HTML(open("resources/gugg.html")).css(".row-with-pic")
     
-    gugg_doc.collect {|ex|
+    gugg_array =gugg_doc.collect {|ex|
       {
         :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", ##Guggs just appends something, so I need to build that in
         :title => ex.css("h4").text,
@@ -37,14 +37,23 @@ class Scraper
         :online_date => ex.css(".offsite").text
       }
     }
-        # if :date.empty? 
-        #   if :special_date.empty?
-        #     :date = :online_date
-        #   else
-        #     :date = :special_date
-        #   end
-        # end
-        # }
+
+# binding.pry
+      
+    gugg_array.each{|ex|   
+      if ex[:date].empty? 
+        if ex[:ongoing_date].empty?
+          ex[:date] = ex[:online_date]
+        else
+          ex[:date] = ex[:ongoing_date]
+        end
+      end
+      ex.delete(:online_date)
+      ex.delete(:ongoing_date)
+
+        }
+    
+    gugg_array
   
   # binding.pry
 
