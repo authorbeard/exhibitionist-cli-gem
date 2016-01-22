@@ -1,15 +1,53 @@
-##PLACE IN LIB/EXHIBITIONIST
-
 class Scraper
-
   attr_accessor :blkyn, :gugg, :the_met
 
+  
+  def self.scrape(url, css)
+    Nokogiri::HTML(open(url)).css(css)
+# binding.pry
+  end
 
-### MAIN SCRAPERS ###
-### I created separate scrapers to make calling them a bit more intuitive for now. 
-### 
 
 
+  def self.parse_bk(nodeset)
+    nodeset.collect{|ex| 
+      {
+        :url => ex.at("a")["href"],
+        :title => ex.css("h2").text,
+        :date => ex.css("h4").text.gsub(/\n( +)?/, "")
+      }}
+  end
+
+  def self.parse_gugg(nodeset)
+    nodeset.collect {|ex| 
+      @exh_hash = {
+        :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", 
+        :title => ex.css("h4").text,
+        :date => ex.css(".exh-dateline").text, 
+        :ongoing_date => ex.css(".row-text strong").text,
+        :online_date => ex.css(".offsite").text
+      }}
+    gugg_trim(@exh_hash)
+  end
+
+  def gugg_trim(array)   
+    gugg_array.each{|ex|   
+      if ex[:date].empty? 
+        if ex[:ongoing_date].empty?
+          ex[:date] = ex[:online_date]
+        else
+          ex[:date] = ex[:ongoing_date]
+        end
+      end
+      ex.delete(:online_date)
+      ex.delete(:ongoing_date)
+      }
+   
+    @gugg_array
+  end
+
+
+=begin ### CODE HERE WORKS ###
   def self.bklyn
     # doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
     # test_html = File.read("resources/bk.html")
@@ -24,9 +62,6 @@ class Scraper
     :date => ex.css("h4").text.gsub(/\n( +)?/, "")
     }
     }
-
-
-    
   end
 
   def self.brooklyn_exhibit(url)
@@ -45,7 +80,7 @@ class Scraper
         :online_date => ex.css(".offsite").text
       }
     }
-      
+  def gugg_trim(array)   
     gugg_array.each{|ex|   
       if ex[:date].empty? 
         if ex[:ongoing_date].empty?
@@ -65,13 +100,7 @@ class Scraper
   def self.gugg_exhibit(url)
     Nokogiri::HTML(open(url)).css("#main-three-center p").first.text
   end
-
-  def self.the_met
-    the_met = Nokogiri::HTML(open(MET_URL))##NEED TO SELECT 2 TYPES
-  end
-
-### DETAIL SCRAPERS ###
-
+=end
 
 
 
@@ -101,9 +130,28 @@ end
 
 #### CONSTANTS ####
 ## Main Library Exhibits URL
-BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
-GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
-MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
+# BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
+# GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
+# MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
+
+URL = {
+        :bklyn => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
+        :gugg => "http://www.guggenheim.org/new-york/exhibitions/on-view",
+        :met => "http://www.metmuseum.org/exhibitions/current-exhibitions"
+      }
+
+CSS = {
+        :bk => {
+                :main => ".exhibitions .col-md-6, .exhibitions .col-md-4",
+                :desc => "css('.exhibition-description').text.gsub(/\s{2,10}/, '\n\n')"
+               },
+        :gugg => {
+                 :main => ".row-with-pic",
+                 :desc => "css.('#main-three-center p').first.text"
+                 },
+        :met => {}
+
+      }
 
 
 

@@ -9,9 +9,10 @@ TODO:
  
 =end
 
-  def initialize(array, name)
+  def initialize(array, name, css)
     @name = name
-    build_exhibits(array)
+    @css = css
+    build_exhibits(array, @css[:desc])
     self.save
     # sleep 1
   # binding.pry
@@ -20,7 +21,7 @@ TODO:
 
   end
 
-  def display_exhibits(array)
+  def display_exhibits
 # binding.pry
     system("clear")
     puts "Current exhibits for #{@name.capitalize} Museum:\n----------------------\n"
@@ -32,13 +33,12 @@ TODO:
   end
 
 
-  def build_exhibits(exhibit_array)
+  def build_exhibits(array, css)
     @exhibits = []
-    exhibit_array.each{|ex| 
-      @exhibits << Exhibit.new(ex, self)
+# binding.pry
+    array.each{|ex| 
+      @exhibits << Exhibit.new(ex, self, css)
     }
-
-
   end
 
   def self.all

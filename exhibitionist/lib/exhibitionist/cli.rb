@@ -16,31 +16,33 @@ class ExhibitionistCli
     input = gets.strip
       case input
       when "1"
-        puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        puts "(type Brooklyn, Guggenheim or Met)"
-        museum = gets.strip.downcase
-          case museum
-          when "brooklyn"
-            @id = museum
-            fetching_message
-            @museum = Museum.new(Scraper.bklyn, @id)
-            @museum.display_exhibits(@exhibits)
-            detail_menu
+        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
+        # puts "(type Brooklyn, Guggenheim or Met)"
+        # museum = gets.strip.downcase
+        #   case museum
+        #   when "brooklyn"
+              fetching_message
+              @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
+              @exh_array = Scraper.parse_bk(@raw)
+  # binding.pry
+              Museum.new(@exh_array, input, CSS[:bk]).display_exhibits
+              # @museum.display_exhibits(@exhibits)
+              detail_menu
 
               
             
             # sleep 2
             # top_menu
 
-          when "guggenheim"
-            @id = museum
-            fetching_message
-            @museum = Museum.new(Scraper.gugg, @id)
-            @museum.display_exhibits(@exhibits)
-            detail_menu
-          else
-            huh?
-          end
+          # when "guggenheim"
+          #   fetching_message
+          #   doc = Scraper.scrape(URL[:gugg], CSS[:gugg][:main]).parse_gugg(@raw)
+            # Museum.new(@gugg_array, museum, CSS[:gugg])
+            # @museum.display_exhibits(@exhibits)
+            # detail_menu
+          # else
+          #   huh?
+          # end
 
           # when "met"
           #   fetching_message

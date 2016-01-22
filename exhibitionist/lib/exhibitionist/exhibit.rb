@@ -1,17 +1,14 @@
-##PLACE IN LIB/EXHIBITIONIST
-
 class Exhibit
   attr_accessor :title, :location, :date, :desc, :url
 
 @@all = []
 
-  def initialize(hash, location)
+  def initialize(hash, museum, css)
     @location = location
+    @desc = css
   # binding.pry
     hash.each{|k, v| 
       self.send(("#{k}="), v)}
-
-
     self.save
   # binding.pry
 
