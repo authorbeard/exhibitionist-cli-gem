@@ -7,7 +7,7 @@ class Scraper
 # binding.pry
   end
 
-
+### PARSERS HERE ####
 
   def self.parse_bk(nodeset)
     nodeset.collect{|ex| 
@@ -19,19 +19,24 @@ class Scraper
   end
 
   def self.parse_gugg(nodeset)
-    nodeset.collect {|ex| 
-      @exh_hash = {
+    guggs = nodeset.collect {|ex| 
+      {
         :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", 
         :title => ex.css("h4").text,
         :date => ex.css(".exh-dateline").text, 
         :ongoing_date => ex.css(".row-text strong").text,
         :online_date => ex.css(".offsite").text
-      }}
-    gugg_trim(@exh_hash)
+      }
+# binding.pry
+
+    }
+    self.trim_gugg(guggs)
+    # guggs
+# binding.pry
   end
 
-  def gugg_trim(array)   
-    gugg_array.each{|ex|   
+  def self.trim_gugg(array)   
+    array.each{|ex|   
       if ex[:date].empty? 
         if ex[:ongoing_date].empty?
           ex[:date] = ex[:online_date]
@@ -42,8 +47,15 @@ class Scraper
       ex.delete(:online_date)
       ex.delete(:ongoing_date)
       }
-   
-    @gugg_array
+  # binding.pry 
+    # @gugg_array
+  end
+
+  def self.parse_met(nodeset)
+    nodeset.collect {|ex|
+
+      ##code this later
+      }
   end
 
 
@@ -136,18 +148,18 @@ end
 
 URL = {
         :bklyn => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
-        :gugg => "http://www.guggenheim.org/new-york/exhibitions/on-view",
+        :gugg => "resources/gugg.html",#"http://www.guggenheim.org/new-york/exhibitions/on-view",
         :met => "http://www.metmuseum.org/exhibitions/current-exhibitions"
       }
 
 CSS = {
         :bk => {
                 :main => ".exhibitions .col-md-6, .exhibitions .col-md-4",
-                :desc => "css('.exhibition-description').text.gsub(/\s{2,10}/, '\n\n')"
+                :desc => ".exhibition-description"
                },
         :gugg => {
                  :main => ".row-with-pic",
-                 :desc => "css.('#main-three-center p').first.text"
+                 :desc => "#main-three-center p"
                  },
         :met => {}
 

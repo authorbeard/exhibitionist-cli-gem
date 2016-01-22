@@ -1,5 +1,5 @@
 class Museum
-  attr_accessor :name, :title, :location, :date, :description, :url, :exhibits
+  attr_accessor :name, :title, :location, :date, :description, :url, :exhibits, :css, :detail
 
   @@all = []
 
@@ -30,6 +30,26 @@ TODO:
 
   ## This probably needs to be called from CLI so it doesn't mistakenly display these exhibits
   ## when someone just chooses one of the other options. 
+  end
+
+  def cleanup(exh_url, exh_desc)
+    raw_desc = Scraper.scrape(exh_url, exh_desc)
+    case self.name
+    when "brooklyn"
+      @detail = raw_desc.text.gsub(/\s{2,10}/, "\n\n")
+      ##send this to Exhibit for CLI to read
+    when "guggenheim"
+      @detail = raw_desc.first.text
+      ##send this to Exhibit for CLI to read
+
+
+    # when "met"
+binding.pry
+
+    end
+
+
+
   end
 
 

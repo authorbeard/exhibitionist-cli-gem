@@ -16,17 +16,17 @@ class ExhibitionistCli
     input = gets.strip
       case input
       when "1"
-        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        # puts "(type Brooklyn, Guggenheim or Met)"
-        # museum = gets.strip.downcase
-        #   case museum
-        #   when "brooklyn"
+        puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
+        puts "(type Brooklyn, Guggenheim or Met)"
+        museum = gets.strip.downcase
+          case museum
+          when "brooklyn"
               fetching_message
               @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
               @exh_array = Scraper.parse_bk(@raw)
   # binding.pry
-              Museum.new(@exh_array, input, CSS[:bk]).display_exhibits
-              # @museum.display_exhibits(@exhibits)
+              @museum = Museum.new(@exh_array, museum, CSS[:bk])
+              @museum.display_exhibits
               detail_menu
 
               
@@ -34,15 +34,16 @@ class ExhibitionistCli
             # sleep 2
             # top_menu
 
-          # when "guggenheim"
-          #   fetching_message
-          #   doc = Scraper.scrape(URL[:gugg], CSS[:gugg][:main]).parse_gugg(@raw)
-            # Museum.new(@gugg_array, museum, CSS[:gugg])
-            # @museum.display_exhibits(@exhibits)
-            # detail_menu
-          # else
-          #   huh?
-          # end
+          when "guggenheim"
+            fetching_message
+            @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
+            @exh_array = Scraper.parse_gugg(@raw)
+            @museum = Museum.new(@exh_array, museum, CSS[:gugg])
+            @museum.display_exhibits
+            detail_menu
+          else
+            huh?
+          end
 
           # when "met"
           #   fetching_message
@@ -74,7 +75,7 @@ class ExhibitionistCli
     puts "--m for the main menu"
     puts "--q to quit"
     input = gets.strip.downcase
-# binding.pry
+
       case input.to_i
       when 0 
         if input == "m"
@@ -85,26 +86,30 @@ class ExhibitionistCli
           huh?
         end
       else
-        url = @museum.exhibits[input.to_i - 1].url
-        ## Need to match this to the right detail scraper.
+        @exhibit = @museum.exhibits[input.to_i - 1]
+binding.pry
+        @museum.cleanup(@exhibit.url, @museum.css[:desc])
+        system("clear")
+        puts @museum.detail
+        ## pass this info & @museum name to cleanup, which handles display.
   # binding.pry
         # @museum.exhibits[input.to_i - 1].get_desc(url)
         # puts Scraper.brooklyn_exhibit(url)
-        puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+       
   # binding.pry
-        go_back         
+        go_back?         
       end
   end
 
-  def go_back
+  def go_back?
     puts "\n\nWhat now?"
     puts "--b to go back to the list"
-    puts "--m for main menue"
+    puts "--m for main menu"
     puts "--q to quit"
     what_now = gets.strip.downcase
       case what_now 
       when "b"
-        @museum.display_exhibits(@exhibits)
+        @museum.display_exhibits
         detail_menu
       when "m"
         top_menu
@@ -112,7 +117,7 @@ class ExhibitionistCli
         farewell
       else
         huh?
-        go_back
+        go_back?
       end
 
   end

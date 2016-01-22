@@ -4,7 +4,7 @@ class Exhibit
 @@all = []
 
   def initialize(hash, museum, css)
-    @location = location
+    @location = museum
     @desc = css
   # binding.pry
     hash.each{|k, v| 
