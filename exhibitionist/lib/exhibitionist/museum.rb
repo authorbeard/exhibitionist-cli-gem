@@ -11,20 +11,21 @@ TODO:
 
   def initialize(array, name)
     @name = name
-    @exhibits = array
+    build_exhibits(array)
     self.save
     # sleep 1
   # binding.pry
-    build_exhibits(@exhibits)
+    
   # binding.pry
 
   end
 
   def display_exhibits(array)
+# binding.pry
     system("clear")
     puts "Current exhibits for #{@name.capitalize} Museum:\n----------------------\n"
     self.exhibits.each_with_index{|ex, i|
-      puts "#{i+1}. #{ex[:title]} \n   #{ex[:date]}"}
+      puts "#{i+1}. #{ex.title} \n   #{ex.date}"}
 
   ## This probably needs to be called from CLI so it doesn't mistakenly display these exhibits
   ## when someone just chooses one of the other options. 
@@ -32,8 +33,9 @@ TODO:
 
 
   def build_exhibits(exhibit_array)
+    @exhibits = []
     exhibit_array.each{|ex| 
-      Exhibit.new(ex, self)
+      @exhibits << Exhibit.new(ex, self)
     }
 
 

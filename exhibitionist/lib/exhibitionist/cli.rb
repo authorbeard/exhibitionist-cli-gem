@@ -9,21 +9,21 @@ class ExhibitionistCli
     
     system("clear")
     puts "Hello. Which exhibits would you like me to fetch?\n\n"
-    puts "1. test the Brooklyn method."
+    puts "1. Search by museum."
     # puts "2. Top exhibits open right now"
     # puts "3. All exhibits open right now"
     puts "And type q at any time to quit."
     input = gets.strip
       case input
       when "1"
-        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        # puts "(type Brooklyn, Guggenheim or Met)"
-        # museum = gets.strip.downcase
-        #   case museum
-        #   when "brooklyn"
-            @id = "bklyn"
+        puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
+        puts "(type Brooklyn, Guggenheim or Met)"
+        museum = gets.strip.downcase
+          case museum
+          when "brooklyn"
+            @id = museum
             fetching_message
-            @museum = Museum.new(Scraper.new.bklyn, @id)
+            @museum = Museum.new(Scraper.bklyn, @id)
             @museum.display_exhibits(@exhibits)
             detail_menu
 
@@ -32,11 +32,15 @@ class ExhibitionistCli
             # sleep 2
             # top_menu
 
-          # when "guggenheim"
-          #   fetching_message
-          #   input = Museum.new(Scraper.new.gugg, input)
-            # input.display_exhibits(@exhibits)
-              # top_menu
+          when "guggenheim"
+            @id = museum
+            fetching_message
+            @museum = Museum.new(Scraper.gugg, @id)
+            @museum.display_exhibits(@exhibits)
+            detail_menu
+          else
+            huh?
+          end
 
           # when "met"
           #   fetching_message
@@ -79,18 +83,15 @@ class ExhibitionistCli
           huh?
         end
       else
-        url = @museum.exhibits[input.to_i - 1][:url] 
+        url = @museum.exhibits[input.to_i - 1].url
         ## Need to match this to the right detail scraper.
-        puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+  binding.pry
+        @museum.exhibits[input.to_i -1].get_desc(url)
+        # puts Scraper.brooklyn_exhibit(url)
+        # puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+  binding.pry
         go_back         
-# binding.pry
-        
-
-
       end
-    # at present, Exhibit.list_all just displays a hash of strings.
-    # but the input here should be able to refer to an exhibit in the Exhibit
-    # @@all array, grab that url, and feed it to the detail scraper
   end
 
   def go_back

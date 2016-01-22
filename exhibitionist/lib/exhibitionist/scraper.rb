@@ -9,9 +9,11 @@ class Scraper
 ### I created separate scrapers to make calling them a bit more intuitive for now. 
 ### 
 
-  def bklyn
+
+  def self.bklyn
     # doc = Nokogiri::HTML(open(BKLYN_URL)).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
     # test_html = File.read("resources/bk.html")
+    # have to grab descriptions right here
     bk_doc = Nokogiri::HTML(open("resources/bk.html")).css(".exhibitions .col-md-6, .exhibitions .col-md-4")
 
 # binding.pry
@@ -22,10 +24,16 @@ class Scraper
     :date => ex.css("h4").text.gsub(/\n( +)?/, "")
     }
     }
+
+
     
   end
 
-  def gugg
+  def self.brooklyn_exhibit(url)
+    Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+  end
+
+  def self.gugg
     gugg_doc = Nokogiri::HTML(open("resources/gugg.html")).css(".row-with-pic")
     
     gugg_array =gugg_doc.collect {|ex|
@@ -37,8 +45,6 @@ class Scraper
         :online_date => ex.css(".offsite").text
       }
     }
-
-# binding.pry
       
     gugg_array.each{|ex|   
       if ex[:date].empty? 
@@ -54,12 +60,13 @@ class Scraper
         }
     
     gugg_array
-  
-  # binding.pry
-
   end
 
-  def the_met
+  def self.gugg_exhibit(url)
+    Nokogiri::HTML(open(url)).css("#main-three-center p").first.text
+  end
+
+  def self.the_met
     the_met = Nokogiri::HTML(open(MET_URL))##NEED TO SELECT 2 TYPES
   end
 
@@ -87,7 +94,7 @@ end
 ####CSS notes for Exhibit details:
 ##BKLYN: @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
     #   -- can just call puts on the above, drop the symbol
- 
+
 
 
 

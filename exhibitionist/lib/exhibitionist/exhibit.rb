@@ -8,7 +8,9 @@ class Exhibit
   def initialize(hash, location)
     @location = location
   # binding.pry
-    hash.each{|k, v| self.send(("#{k}="), v)}
+    hash.each{|k, v| 
+      self.send(("#{k}="), v)}
+
 
     self.save
   # binding.pry
@@ -16,7 +18,9 @@ class Exhibit
   end
 
 
-  def description=(doc)
+  def get_desc(url)
+    
+
     ## --SEE SCRAPER NOTES FOR APPROPRIATE SCRAPING, FORMATTING URL, CSS & REGEXP
     ## --parses results of detail scrape
     ## --assigns appropriate text to @description
@@ -30,10 +34,10 @@ class Exhibit
 
   end
 
-  def get_detail(exhibit)
-    @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
-      puts @desc.gsub(/\s{2,10}/, "\n\n")
-  end
+  # def get_detail(exhibit)
+  #   @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
+  #     puts @desc.gsub(/\s{2,10}/, "\n\n")
+  # end
 
 
 
