@@ -85,11 +85,11 @@ class ExhibitionistCli
       else
         url = @museum.exhibits[input.to_i - 1].url
         ## Need to match this to the right detail scraper.
-  binding.pry
-        @museum.exhibits[input.to_i -1].get_desc(url)
+  # binding.pry
+        # @museum.exhibits[input.to_i - 1].get_desc(url)
         # puts Scraper.brooklyn_exhibit(url)
-        # puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
-  binding.pry
+        puts Nokogiri::HTML(open(url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
+  # binding.pry
         go_back         
       end
   end
