@@ -1,32 +1,39 @@
 class ExhibitionistCli
-  attr_reader :museum, :id
+  attr_reader :museums, :current 
 
   def initialize
+    @museums = []
     top_menu
   end
 
   def top_menu
     
     system("clear")
-    puts "Hello. Which exhibits would you like me to fetch?\n\n"
-    puts "1. Search by museum."
-    # puts "2. Top exhibits open right now"
-    # puts "3. All exhibits open right now"
-    puts "And type q at any time to quit."
+    puts "Hiya. At the moment, here's what you can do:\n\n"
+    puts "1. See the Brooklyn museum's current exhibitions."
+    puts "2. See the Guggenhim's current exhibitions."
+    puts "3. See everything so far."
+    puts "(there's more functionality to come)"
+    puts "Or type q to quit."
     input = gets.strip
       case input
       when "1"
-        puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        puts "(type Brooklyn, Guggenheim or Met)"
-        museum = gets.strip.downcase
-          case museum
-          when "brooklyn"
+        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
+        # puts "(type Brooklyn, Guggenheim or Met)"
+        # museum = gets.strip.downcase
+        #   case museum
+        #   when "brooklyn"
               fetching_message
-              @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
-              @exh_array = Scraper.parse_bk(@raw)
   # binding.pry
-              @museum = Museum.new(@exh_array, museum, CSS[:bk])
-              @museum.display_exhibits
+  
+              @brooklyn||= Museum.build("brooklyn", URL[:bklyn], CSS[:bk])
+              @current = @brooklyn
+              @museums << @brooklyn
+  #             @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
+  #             @exh_array = Scraper.parse_bk(@raw)
+  # binding.pry
+  #             @museum = Museum.new(@exh_array, "brooklyn", CSS[:bk])
+              @brooklyn.display_exhibits
               detail_menu
 
               
@@ -34,16 +41,16 @@ class ExhibitionistCli
             # sleep 2
             # top_menu
 
-          when "guggenheim"
-            fetching_message
-            @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
-            @exh_array = Scraper.parse_gugg(@raw)
-            @museum = Museum.new(@exh_array, museum, CSS[:gugg])
-            @museum.display_exhibits
-            detail_menu
-          else
-            huh?
-          end
+          # when "guggenheim"
+            # fetching_message
+            # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
+            # @exh_array = Scraper.parse_gugg(@raw)
+            # @museum = Museum.new(@exh_array, museum, CSS[:gugg])
+            # @museum.display_exhibits
+            # detail_menu
+          # else
+          #   huh?
+          # end
 
           # when "met"
           #   fetching_message
@@ -53,11 +60,22 @@ class ExhibitionistCli
 
           # end
 
-      # when "2"
-      #   under_construction
+      when "2"
+              fetching_message
+              @gugg||= Museum.build("guggenheim", URL[:gugg], CSS[:gugg]) 
+              @museums << @gugg
+              @current = @gugg
+              # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
+              # @exh_array = Scraper.parse_gugg(@raw)
+              # @museum = Museum.new(@exh_array, "guggenheim", CSS[:gugg])
+              @current.display_exhibits
+              detail_menu
 
-      # when "3"
-      #   under_construction
+      when "3"
+        # under_construction
+        @museums.each{|m|
+          m.display_exhibits}
+        under_construction
 
       when "q"
         farewell
@@ -86,17 +104,14 @@ class ExhibitionistCli
           huh?
         end
       else
-        @exhibit = @museum.exhibits[input.to_i - 1]
-binding.pry
-        @museum.cleanup(@exhibit.url, @museum.css[:desc])
+  binding.pry
+        @exhibit = @current.exhibits[input.to_i - 1]
+# binding.pry 
+        @exhibit.desc || @current.get_exhib(@exhibit, @exhibit.url, @current.css[:desc])
+# binding.pry
+        # @museum.get_exhib(@exhibit, @exhibit.url, @museum.css[:desc])
         system("clear")
-        puts @museum.detail
-        ## pass this info & @museum name to cleanup, which handles display.
-  # binding.pry
-        # @museum.exhibits[input.to_i - 1].get_desc(url)
-        # puts Scraper.brooklyn_exhibit(url)
-       
-  # binding.pry
+        puts "#{@exhibit.title}\n\n #{@exhibit.desc}"
         go_back?         
       end
   end
@@ -109,7 +124,7 @@ binding.pry
     what_now = gets.strip.downcase
       case what_now 
       when "b"
-        @museum.display_exhibits
+        @current.display_exhibits
         detail_menu
       when "m"
         top_menu
@@ -124,7 +139,7 @@ binding.pry
 
 
   def fetching_message
-    puts "\nGetting your exhibits now. This might take a second.\n"
+    puts "\nGotcha. Gimme a second while I ask around.\n"
   end
 
   def huh?
@@ -141,11 +156,15 @@ binding.pry
   end
 
   def under_construction
-    puts "Art takes time and this feature ain't built yet."
+    puts "\n\nWelp, this ain't actually built yet. Art takes time."
     puts "But if yer in a hurry for some art, type 'now'"
     now = gets.strip.downcase
       if now == "now"
         %x`open -a Safari http://www.dogsplayingpoker.org/gallery/coolidge/img/a_friend_in_need.jpg`
+        sleep 1
+        top_menu
+      elsif now == 'q'
+        farewell
       else
         puts "Okay, check back later."
         sleep 1

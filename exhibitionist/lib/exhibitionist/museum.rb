@@ -9,20 +9,40 @@ TODO:
  
 =end
 
-  def initialize(array, name, css)
+  def initialize(nodeset, name, css)
     @name = name
     @css = css
+    array = parse(nodeset, name)
+# binding.pry
     build_exhibits(array, @css[:desc])
     self.save
     # sleep 1
-  # binding.pry
+  binding.pry
     
   # binding.pry
 
   end
 
-  def display_exhibits
+  def self.build(museum_name, url, css_hash)
+    @raw = Scraper.scrape(url, css_hash[:main])
+    # @exh_array = Scraper.parse_bk(@raw)
+    Museum.new(@raw, museum_name, css_hash)
 # binding.pry
+  end
+
+  def parse(nodeset, name)
+    case name
+    when "brooklyn"
+      Scraper.parse_bk(nodeset)
+    when "guggenheim"
+      Scraper.parse_gugg(nodeset)
+
+    end
+
+  end
+
+  def display_exhibits
+binding.pry
     system("clear")
     puts "Current exhibits for #{@name.capitalize} Museum:\n----------------------\n"
     self.exhibits.each_with_index{|ex, i|
@@ -32,14 +52,16 @@ TODO:
   ## when someone just chooses one of the other options. 
   end
 
-  def cleanup(exh_url, exh_desc)
-    raw_desc = Scraper.scrape(exh_url, exh_desc)
+  def get_exhib(exh_obj, exh_url, desc_css)
+    raw_desc = Scraper.scrape(exh_url, desc_css)
     case self.name
     when "brooklyn"
-      @detail = raw_desc.text.gsub(/\s{2,10}/, "\n\n")
+  # binding.pry
+      exh_obj.desc = raw_desc.text.gsub(/\s{2,10}/, "\n\n")
+# binding.pry
       ##send this to Exhibit for CLI to read
     when "guggenheim"
-      @detail = raw_desc.first.text
+      exh_obj.desc = raw_desc.first.text
       ##send this to Exhibit for CLI to read
 
 

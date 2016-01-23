@@ -1,11 +1,11 @@
 class Exhibit
-  attr_accessor :title, :location, :date, :desc, :url
+  attr_accessor :title, :location, :date, :desc, :url, :css
 
 @@all = []
 
   def initialize(hash, museum, css)
     @location = museum
-    @desc = css
+    @css = css
   # binding.pry
     hash.each{|k, v| 
       self.send(("#{k}="), v)}
