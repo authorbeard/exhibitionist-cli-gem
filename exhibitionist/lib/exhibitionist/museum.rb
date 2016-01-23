@@ -17,9 +17,9 @@ TODO:
     build_exhibits(array, @css[:desc])
     self.save
     # sleep 1
-  binding.pry
+# binding.pry
     
-  # binding.pry
+# binding.pry
 
   end
 
@@ -42,7 +42,7 @@ TODO:
   end
 
   def display_exhibits
-binding.pry
+# binding.pry
     system("clear")
     puts "Current exhibits for #{@name.capitalize} Museum:\n----------------------\n"
     self.exhibits.each_with_index{|ex, i|
@@ -66,7 +66,7 @@ binding.pry
 
 
     # when "met"
-binding.pry
+# binding.pry
 
     end
 
@@ -91,12 +91,12 @@ binding.pry
     @@all << self
   end
 
-  def self.list_museums
-    mus_array = []
-    @@all.each_with_index{|m, i| 
-      mus_array << "#{i+1}. #{m.name} Museum"}
-    puts mus_array 
-  end
+  # def self.list_museums
+  #   mus_array = []
+  #   @@all.each_with_index{|m, i| 
+  #     mus_array << "#{i+1}. #{m.name} Museum"}
+  #   puts mus_array 
+  # end
 
 
 end

@@ -172,6 +172,12 @@ class ExhibitionistCli
       end
   end
 
+  def list_museums
+    mus_array = []
+    @@all.each_with_index{|m, i| 
+      mus_array << "#{i+1}. #{m.name.capitalize} Museum"}
+    puts mus_array 
+  end
 
 
 end
