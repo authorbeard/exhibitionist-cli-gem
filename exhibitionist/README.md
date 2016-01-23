@@ -1,6 +1,8 @@
 # Exhibitionist
 
-Exhibitionist gets details on current exhibitions from art museums. At the moment (v.1.0.0), it's only grabbing info from the Brooklyn Museum and the Guggenheim Museum, and only for current exhibitions (not upcoming or any of the others that some museums incluce), but I'll add instructions below for adding museums. 
+Exhibitionist gets details on current exhibitions from art museums. As of first release, this only works for the Brooklyn Museum and the Guggenheim. 
+
+See below for instructions on adding a new museum to the current code. 
 
 ### Wanna add a museum?
 
