@@ -10,9 +10,11 @@ class ExhibitionistCli
     
     system("clear")
     puts "Hiya. At the moment, here's what you can do:\n\n"
-    puts "1. See the Brooklyn museum's current exhibitions."
-    puts "2. See the Guggenhim's current exhibitions."
-    puts "3. See everything so far."
+    display_museums
+
+    # puts "1. See the Brooklyn museum's current exhibitions."
+    # puts "2. See the Guggenhim's current exhibitions."
+    puts "#{MUSEUMS.size + 1}. See everything so far."
     puts "(there's more functionality to come)"
     puts "Or type q to quit."
     input = gets.strip
@@ -26,8 +28,8 @@ class ExhibitionistCli
               fetching_message
   # binding.pry
   
-              @brooklyn||= Museum.build("brooklyn", URL[:bklyn], CSS[:bk])
-              @current = @brooklyn
+              # @brooklyn||= Museum.build("brooklyn", URL[:bklyn], CSS[:bk])
+              @current = Museum.new(MUSEUMS[input.to_i - 1])
               @museums << @brooklyn
   #             @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
   #             @exh_array = Scraper.parse_bk(@raw)
@@ -73,8 +75,7 @@ class ExhibitionistCli
 
       when "3"
         # under_construction
-        @museums.each{|m|
-          m.display_exhibits}
+        
         under_construction
 
       when "q"
@@ -172,12 +173,18 @@ class ExhibitionistCli
       end
   end
 
-  def list_museums
-    mus_array = []
-    @@all.each_with_index{|m, i| 
-      mus_array << "#{i+1}. #{m.name.capitalize} Museum"}
-    puts mus_array 
+  def display_museums
+    MUSEUMS.each_with_index{|m, i|
+      puts "#{i+1}. See the #{m[:name].capitalize} Museum's current exhibitions"
+    }
   end
+
+  # def list_museums
+  #   mus_array = []
+  #   @@all.each_with_index{|m, i| 
+  #     mus_array << "#{i+1}. #{m.name.capitalize} Museum"}
+  #   puts mus_array 
+  # end
 
 
 end

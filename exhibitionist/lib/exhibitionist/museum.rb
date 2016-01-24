@@ -1,5 +1,5 @@
 class Museum
-  attr_accessor :name, :title, :location, :date, :description, :url, :exhibits, :css, :detail
+  attr_accessor :name, :title, :location, :date, :description, :url, :exhibits, :main_css, :desc_css
 
   @@all = []
 
@@ -9,12 +9,15 @@ TODO:
  
 =end
 
-  def initialize(nodeset, name, css)
-    @name = name
-    @css = css
-    array = parse(nodeset, name)
+  def initialize(museum)
+    @name = museum[:name]
+    self.build(museum)
+
+    
+#     raw = Scraper.scrape(@url, @main_css)
+#     array = parse(nodeset, name)
 # binding.pry
-    build_exhibits(array, @css[:desc])
+#     build_exhibits(array, @css[:desc])
     self.save
     # sleep 1
 # binding.pry
@@ -23,10 +26,12 @@ TODO:
 
   end
 
-  def self.build(museum_name, url, css_hash)
-    @raw = Scraper.scrape(url, css_hash[:main])
+  def build(name, hash)
+    hash.each{|k, v| self.send(("#{k}="), v)}
+    raw = Scraper.scrape(@url, @main_css)
     # @exh_array = Scraper.parse_bk(@raw)
-    Museum.new(@raw, museum_name, css_hash)
+    # parse(raw, name)
+    build_exhibits(parse(raw, name), @desc_css)
 # binding.pry
   end
 
@@ -81,6 +86,11 @@ TODO:
     array.each{|ex| 
       @exhibits << Exhibit.new(ex, self, css)
     }
+  end
+
+  def self.display_all
+    @@all.each_with_index{|m, i| 
+      puts "{i+1}. #{m.name.capitalize} Museum"}
   end
 
   def self.all

@@ -118,34 +118,6 @@ class Scraper
 
 end
 
-### SCRAPERS ####
-
-## 1) MAIN EXHIBIT SCRAPER FOR EACH MUSEUM 
-
-# 2) DETAIL EXHIBIT SCRAPER FOR EACH MUSEUM
-##   --feed @url for each listing to the scraper
-    # def get_detail(exhibit)
-    #   @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text
-    #   puts @desc.gsub(/\s{2,10}/, "\n\n")
-    #   ##CAN ATTACH GSUB TO SCRAPER, WILL PUTS CORRECTLY##
-    # end
-
-# 3) (FUTURE FUNCTIONALITY: ADD'L SCRAPERS FOR UPCOMING, ETC.)
-
-####CSS notes for Exhibit details:
-##BKLYN: @desc = Nokogiri::HTML(open(exhibit.url)).css(".exhibition-description").text.gsub(/\s{2,10}/, "\n\n")
-    #   -- can just call puts on the above, drop the symbol
-
-
-
-
-
-#### CONSTANTS ####
-## Main Library Exhibits URL
-# BKLYN_URL = "https://www.brooklynmuseum.org/exhibitions"
-# GUGG_URL = "http://www.guggenheim.org/new-york/exhibitions/on-view"
-# MET_URL = "http://www.metmuseum.org/exhibitions/current-exhibitions"
-
 URL = {
         :bklyn => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
         :gugg => "resources/gugg.html",#"http://www.guggenheim.org/new-york/exhibitions/on-view",
@@ -165,6 +137,20 @@ CSS = {
 
       }
 
+MUSEUMS = [
+          { :name => "brooklyn",
+            :url => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
+            :main_css => ".exhibitions .col-md-6, .exhibitions .col-md-4",
+            :desc_css => ".exhibition-description"
+          },
+
+          { :name => "guggenheim",
+            :url => "resources/gugg.html",#"http://www.guggenheim.org/new-york/exhibitions/on-view",
+            :main_css => ".row-with-pic",
+            :desc_css => "#main-three-center p"
+          }
+
+         ]
 
 
 ####  FUTURE FUNCTIONALITY ####
