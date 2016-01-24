@@ -118,24 +118,24 @@ class Scraper
 
 end
 
-URL = {
-        :bklyn => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
-        :gugg => "resources/gugg.html",#"http://www.guggenheim.org/new-york/exhibitions/on-view",
-        :met => "http://www.metmuseum.org/exhibitions/current-exhibitions"
-      }
+# URL = {
+#         :bklyn => "resources/bk.html",#"https://www.brooklynmuseum.org/exhibitions",
+#         :gugg => "resources/gugg.html",#"http://www.guggenheim.org/new-york/exhibitions/on-view",
+#         :met => "http://www.metmuseum.org/exhibitions/current-exhibitions"
+#       }
 
-CSS = {
-        :bk => {
-                :main => ".exhibitions .col-md-6, .exhibitions .col-md-4",
-                :desc => ".exhibition-description"
-               },
-        :gugg => {
-                 :main => ".row-with-pic",
-                 :desc => "#main-three-center p"
-                 },
-        :met => {}
+# CSS = {
+#         :bk => {
+#                 :main => ".exhibitions .col-md-6, .exhibitions .col-md-4",
+#                 :desc => ".exhibition-description"
+#                },
+#         :gugg => {
+#                  :main => ".row-with-pic",
+#                  :desc => "#main-three-center p"
+#                  },
+#         :met => {}
 
-      }
+#       }
 
 MUSEUMS = [
           { :name => "brooklyn",

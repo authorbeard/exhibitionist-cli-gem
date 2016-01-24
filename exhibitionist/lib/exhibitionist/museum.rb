@@ -9,14 +9,14 @@ TODO:
  
 =end
 
-  def initialize(museum)
-    @name = museum[:name]
-    self.build(museum)
+  def initialize(museum_hash)
+binding.pry    
+    self.build(museum_hash)
 
     
 #     raw = Scraper.scrape(@url, @main_css)
 #     array = parse(nodeset, name)
-# binding.pry
+
 #     build_exhibits(array, @css[:desc])
     self.save
     # sleep 1
@@ -26,13 +26,14 @@ TODO:
 
   end
 
-  def build(name, hash)
-    hash.each{|k, v| self.send(("#{k}="), v)}
+  def build(museum_hash)
+    museum_hash.each{|k, v| self.send(("#{k}="), v)}
+# binding.pry
     raw = Scraper.scrape(@url, @main_css)
     # @exh_array = Scraper.parse_bk(@raw)
     # parse(raw, name)
-    build_exhibits(parse(raw, name), @desc_css)
-# binding.pry
+    build_exhibits(parse(raw, @name), @desc_css)
+binding.pry
   end
 
   def parse(nodeset, name)
@@ -57,16 +58,16 @@ TODO:
   ## when someone just chooses one of the other options. 
   end
 
-  def get_exhib(exh_obj, exh_url, desc_css)
-    raw_desc = Scraper.scrape(exh_url, desc_css)
+  def get_exhib(exhibit)
+    raw_desc = Scraper.scrape(exhibit.url, exhibit.css)
     case self.name
     when "brooklyn"
   # binding.pry
-      exh_obj.desc = raw_desc.text.gsub(/\s{2,10}/, "\n\n")
+      exhibit.desc = raw_desc.text.gsub(/\s{2,10}/, "\n\n")
 # binding.pry
       ##send this to Exhibit for CLI to read
     when "guggenheim"
-      exh_obj.desc = raw_desc.first.text
+      exhibit.desc = raw_desc.first.text
       ##send this to Exhibit for CLI to read
 
 

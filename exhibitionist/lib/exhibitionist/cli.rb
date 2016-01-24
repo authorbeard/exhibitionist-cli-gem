@@ -18,8 +18,14 @@ class ExhibitionistCli
     puts "(there's more functionality to come)"
     puts "Or type q to quit."
     input = gets.strip
-      case input
-      when "1"
+      if input == "q"
+        farewell
+      elsif input.to_i == 0
+        huh?
+      elsif input.to_i > MUSEUMS.size
+        under_construction
+      else 
+        
         # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
         # puts "(type Brooklyn, Guggenheim or Met)"
         # museum = gets.strip.downcase
@@ -30,13 +36,14 @@ class ExhibitionistCli
   
               # @brooklyn||= Museum.build("brooklyn", URL[:bklyn], CSS[:bk])
               @current = Museum.new(MUSEUMS[input.to_i - 1])
-              @museums << @brooklyn
+              @museums << @current
   #             @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
   #             @exh_array = Scraper.parse_bk(@raw)
   # binding.pry
   #             @museum = Museum.new(@exh_array, "brooklyn", CSS[:bk])
-              @brooklyn.display_exhibits
+              @current.display_exhibits
               detail_menu
+      end
 
               
             
@@ -62,29 +69,19 @@ class ExhibitionistCli
 
           # end
 
-      when "2"
-              fetching_message
-              @gugg||= Museum.build("guggenheim", URL[:gugg], CSS[:gugg]) 
-              @museums << @gugg
-              @current = @gugg
-              # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
-              # @exh_array = Scraper.parse_gugg(@raw)
-              # @museum = Museum.new(@exh_array, "guggenheim", CSS[:gugg])
-              @current.display_exhibits
-              detail_menu
-
-      when "3"
+        
+              # fetching_message
+              # @gugg||= Museum.build("guggenheim", URL[:gugg], CSS[:gugg]) 
+              # @museums << @gugg
+              # @current = @gugg
+              # # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
+              # # @exh_array = Scraper.parse_gugg(@raw)
+              # # @museum = Museum.new(@exh_array, "guggenheim", CSS[:gugg])
+              # @current.display_exhibits
+              # detail_menu
         # under_construction
         
-        under_construction
-
-      when "q"
-        farewell
-
-      else
-        huh?
-      end
-
+          
   end
 
 
@@ -107,8 +104,8 @@ class ExhibitionistCli
       else
   binding.pry
         @exhibit = @current.exhibits[input.to_i - 1]
-# binding.pry 
-        @exhibit.desc || @current.get_exhib(@exhibit, @exhibit.url, @current.css[:desc])
+binding.pry 
+        @exhibit.desc || @current.get_exhib(@exhibit)
 # binding.pry
         # @museum.get_exhib(@exhibit, @exhibit.url, @museum.css[:desc])
         system("clear")
