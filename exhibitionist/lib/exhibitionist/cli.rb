@@ -1,6 +1,21 @@
 class ExhibitionistCli
   attr_reader :museums, :current 
 
+  MUSEUMS = [
+          { :name => "brooklyn",
+            :url => "https://www.brooklynmuseum.org/exhibitions", #"resources/bk.html",
+            :main_css => ".exhibitions .col-md-6, .exhibitions .col-md-4",
+            :desc_css => ".exhibition-description"
+          },
+
+          { :name => "guggenheim",
+            :url => "http://www.guggenheim.org/new-york/exhibitions/on-view", #"resources/gugg.html",
+            :main_css => ".row-with-pic",
+            :desc_css => "#main-three-center p"
+          }
+
+         ]
+
   def initialize
     @museums = []
     top_menu
@@ -11,9 +26,6 @@ class ExhibitionistCli
     system("clear")
     puts "Hiya. At the moment, here's what you can do:\n\n"
     display_museums
-
-    # puts "1. See the Brooklyn museum's current exhibitions."
-    # puts "2. See the Guggenhim's current exhibitions."
     puts "#{MUSEUMS.size + 1}. See everything so far."
     puts "(there's more functionality to come)"
     puts "Or type q to quit."
@@ -23,65 +35,23 @@ class ExhibitionistCli
       elsif input.to_i == 0
         huh?
       elsif input.to_i > MUSEUMS.size
-        under_construction
-      else 
+        system("clear")
+        fetching_message
         
-        # puts "\nWe got the Brooklyn Museum, The Guggenheim and The Met right now. "
-        # puts "(type Brooklyn, Guggenheim or Met)"
-        # museum = gets.strip.downcase
-        #   case museum
-        #   when "brooklyn"
-              fetching_message
-  # binding.pry
-  
-              # @brooklyn||= Museum.build("brooklyn", URL[:bklyn], CSS[:bk])
-              @current = Museum.new(MUSEUMS[input.to_i - 1])
-              @museums << @current
-  #             @raw = Scraper.scrape(URL[:bklyn], CSS[:bk][:main])
-  #             @exh_array = Scraper.parse_bk(@raw)
-  # binding.pry
-  #             @museum = Museum.new(@exh_array, "brooklyn", CSS[:bk])
-              @current.display_exhibits
-              detail_menu
-      end
-
-              
-            
-            # sleep 2
-            # top_menu
-
-          # when "guggenheim"
-            # fetching_message
-            # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
-            # @exh_array = Scraper.parse_gugg(@raw)
-            # @museum = Museum.new(@exh_array, museum, CSS[:gugg])
-            # @museum.display_exhibits
-            # detail_menu
-          # else
-          #   huh?
-          # end
-
-          # when "met"
-          #   fetching_message
-              # input = Museum.new(Scraper.new.the_met, input)
-              # input.display_exhibits(@exhibits)
-          #   top_menu
-
-          # end
-
+        MUSEUMS.each{|m|
+          @current = Museum.new(m)
         
-              # fetching_message
-              # @gugg||= Museum.build("guggenheim", URL[:gugg], CSS[:gugg]) 
-              # @museums << @gugg
-              # @current = @gugg
-              # # @raw = Scraper.scrape(URL[:gugg], CSS[:gugg][:main])
-              # # @exh_array = Scraper.parse_gugg(@raw)
-              # # @museum = Museum.new(@exh_array, "guggenheim", CSS[:gugg])
-              # @current.display_exhibits
-              # detail_menu
+        current.display_exhibits}
+        detail_menu
         # under_construction
-        
-          
+      else 
+        fetching_message
+        @current = Museum.new(MUSEUMS[input.to_i - 1])
+        @museums << @current
+        system("clear")
+        @current.display_exhibits
+        detail_menu
+      end 
   end
 
 
@@ -102,12 +72,8 @@ class ExhibitionistCli
           huh?
         end
       else
-  binding.pry
-        @exhibit = @current.exhibits[input.to_i - 1]
-binding.pry 
+        @exhibit = @current.exhibits[input.to_i - 1] 
         @exhibit.desc || @current.get_exhib(@exhibit)
-# binding.pry
-        # @museum.get_exhib(@exhibit, @exhibit.url, @museum.css[:desc])
         system("clear")
         puts "#{@exhibit.title}\n\n #{@exhibit.desc}"
         go_back?         
@@ -149,8 +115,8 @@ binding.pry
 
   def farewell
     system("clear")
-    puts "Fine. Go watch TV or get drunk, you philistine.\n\n"
-    # sleep 1
+    puts "\n\n\n\nFine. Go watch TV or get drunk, you philistine.\n\n\n\n\n"
+    sleep 1
   end
 
   def under_construction
@@ -175,33 +141,4 @@ binding.pry
       puts "#{i+1}. See the #{m[:name].capitalize} Museum's current exhibitions"
     }
   end
-
-  # def list_museums
-  #   mus_array = []
-  #   @@all.each_with_index{|m, i| 
-  #     mus_array << "#{i+1}. #{m.name.capitalize} Museum"}
-  #   puts mus_array 
-  # end
-
-
 end
-
-
-
-=begin
-
-1) welcomes user, calls first menu
-2) takes input of museum name and: 
-  --calls that scraper
-  --Instantiates Museum, which builds exhibits
-  --displays events for that museum
-  --calls details sub-menu
-3) add "top events" option
-  --calls each scraper but adds .first
-
-3) needs sub-menus:
-  --
-
-
-
-=end
