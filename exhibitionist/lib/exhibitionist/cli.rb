@@ -42,8 +42,12 @@ class ExhibitionistCli
           @current = Museum.new(m)
         
         current.display_exhibits}
+        puts "\n\nWhich museum do you wanna check out?"
+          mus = gets.strip.downcase
+          system("clear")
+          Museum.all.detect{|m| m.name == mus}.display_exhibits
         detail_menu
-        # under_construction
+
       else 
         fetching_message
         @current = Museum.new(MUSEUMS[input.to_i - 1])
