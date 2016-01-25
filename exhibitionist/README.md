@@ -9,64 +9,50 @@ See below for instructions on adding a new museum to the current code.
 To add a museum, you need to do a couple things (at least as of right now): 
 
   1) Add your museum to the MUSEUMS constant array:  
-      * URL for the main list of exhibitions  
-      * the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
-      * the CSS for getting the exhibition's description from each exhibition's page    
-  2) The main scraper usually isn't good enough. This is where Scraper#parse comes in:  
-      --create a parse method that deals with whatever Nokogiri::HTML(open(URL)).css(CSS) returns. Name it appropriately.  
-      --Sometimes, you need to go even further. I just created a helper method to clean up the Guggenheim's listings:  
-      {% highlight ruby %}
-      def self.parse_gugg(nodeset)
-        guggs = nodeset.collect {|ex| 
-          {
-            :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", 
-            :title => ex.css("h4").text,
-            :date => ex.css(".exh-dateline").text, 
-            :ongoing_date => ex.css(".row-text strong").text,
-            :online_date => ex.css(".offsite").text
-          }
-          }
-        self.trim_gugg(guggs)
-      end
+      -- URL for the main list of exhibitions  
+      -- the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
+      -- the CSS for getting the exhibition's description from each exhibition's page  
 
-      def self.trim_gugg(array)   
-        array.each{|ex|   
-        if ex[:date].empty? 
-          if ex[:ongoing_date].empty?
-            ex[:date] = ex[:online_date]
-          else
-            ex[:date] = ex[:ongoing_date]
-          end
+  2) The main scraper usually isn't good enough. This is where Scraper#parse comes in:  
+      -- create a parse method that deals with whatever Nokogiri::HTML(open(URL)).css(CSS) returns. Name it appropriately.  
+      -- Sometimes, you need to go even further. I just created a helper method to clean up the Guggenheim's listings, then called that from within the parser:  
+
+      {% highlight ruby %}
+        def self.parse_gugg(nodeset)
+          guggs = nodeset.collect {|ex| 
+            {
+              :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", 
+              :title => ex.css("h4").text,
+              :date => ex.css(".exh-dateline").text, 
+              :ongoing_date => ex.css(".row-text strong").text,
+              :online_date => ex.css(".offsite").text
+            }
+            }
+          self.trim_gugg(guggs)
         end
-        ex.delete(:online_date)
-        ex.delete(:ongoing_date)
-        }
-      end
+
+        def self.trim_gugg(array)   
+          array.each{|ex|   
+          if ex[:date].empty? 
+            if ex[:ongoing_date].empty?
+              ex[:date] = ex[:online_date]
+            else
+              ex[:date] = ex[:ongoing_date]
+            end
+          end
+          ex.delete(:online_date)
+          ex.delete(:ongoing_date)
+          }
+        end
       {% endhighlight %}
-      --go to Museum#parse, add another term to the case statement to select the right museum
-  3) Then go down to Museum#get_exhib and do the same thing for the CSS 
-  3) Add another item to lib/exhibitionist/cli #top_menu, first in the display up top, then add a "when"
-  statement down below. 
-    --these need to follow the same pattern as the existing hashes: one for the main, one for exhibits
-  4) This is the next pain. You'll probably need to screw around with whatever you scrape. I broke this down into two parts: 
-    a) scraper.parse_[MUSEUM] takes in the nodeset you scraped and assigns all the right keys. Sometimes you need additional help (like with .parse_gugg, which has a trim method to account for the funky way they list dates on their website)
-    b) Museum.get_exhib, which cleans up the formatting and/or further digs into the CSS to get the right stuff (the Brooklyn Museum description just needed formatting, but the Guggenheim needed further drilling to return the right text). 
+      --go to Museum#parse, add another term to the case statement to select the right museum  
+
+  3) Then go down to Museum#get_exhib and do the same thing for each exhibition's description.   
 
 ### How this works: 
 
-The CLI handles the first sort, getting museums to build themselves by feeding in the correct URL and passing the correct museum's CSS set. 
---Museums then build their own Exhibit objects:
-  a) Exhibit.initialize populates exhibit hash & saves it
-  b) Exhibit also takes in the CSS to select relevant exhibit description text, though for now this is just so each Exhibit object knows a bit about itself. 
-  c) Associates Museums & Exhibits using has_many_owned_by_one
+1) The CLI gets called from the executable. It builds the menu based on how many museums have been added.  2) #top_menu generates the list of current museums.  3) The user's input selects the the hash containing the museum's name, URL & CSS sets, then hands them on to the Museum class.  4) Museum#initialize builds the museum, which builds the exhibits.  5) top_menu then slaps on #detail_menu, which lets a user choose which event to scrape and lets the user navigate back to the museum's list of exhibitions or all the way back to the top menu. 
 
---the CLI#detail_menu is what handles scraping event descriptions:
-  a) @current is reset each time a museum is selected. It's set equal to the museum object
-  b) The menu uses user input to select an exhibit object from the museum's array. 
-  c) The first time through (during each CLI session), it calls on that Museum object's #get_exhib method to populate the @desc for that Exhibit object, handing it the correct CSS from the hash passed through when it was initialized. 
-  d) The next time through, it should just rad the @desc attribute for the relevant object. 
-
---the user can do this for each Exhibition listed on the museum's website or return and select the next museum
 
 ### Current issues: 
 
