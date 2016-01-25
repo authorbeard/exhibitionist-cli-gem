@@ -9,9 +9,9 @@ See below for instructions on adding a new museum to the current code.
 To add a museum, you need to do a couple things (at least as of right now): 
 
   1) Add your museum to the MUSEUMS constant array:  
-      --URL for the main list of exhibitions  
-      --the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
-      --the CSS for getting the exhibition's description from each exhibition's page    
+      * URL for the main list of exhibitions  
+      * the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
+      * the CSS for getting the exhibition's description from each exhibition's page    
   2) The main scraper usually isn't good enough. This is where Scraper#parse comes in:  
       --create a parse method that deals with whatever Nokogiri::HTML(open(URL)).css(CSS) returns. Name it appropriately.  
       --Sometimes, you need to go even further. I just created a helper method to clean up the Guggenheim's listings:  
