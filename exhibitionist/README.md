@@ -51,7 +51,11 @@ To add a museum, you need to do a couple things (at least as of right now):
 
 ### How this works: 
 
-1) The CLI gets called from the executable. It builds the menu based on how many museums have been added.  2) #top_menu generates the list of current museums.  3) The user's input selects the the hash containing the museum's name, URL & CSS sets, then hands them on to the Museum class.  4) Museum#initialize builds the museum, which builds the exhibits.  5) top_menu then slaps on #detail_menu, which lets a user choose which event to scrape and lets the user navigate back to the museum's list of exhibitions or all the way back to the top menu. 
+1) The CLI gets called from the executable. It builds the menu based on how many museums have been added.
+2) #top_menu generates the list of current museums.  
+3) The user's input selects the the hash containing the museum's name, URL & CSS sets, then hands them on to the Museum class.  
+4) Museum#initialize builds the museum, which builds the exhibits.  
+5) top_menu then slaps on #detail_menu, which lets a user choose which event to scrape and lets the user navigate back to the museum's list of exhibitions or all the way back to the top menu. 
 
 
 ### Current issues: 
