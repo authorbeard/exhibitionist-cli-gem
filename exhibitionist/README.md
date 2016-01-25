@@ -63,6 +63,8 @@ To add a museum, you need to do a couple things (at least as of right now):
 1) I don't think either top_menu or detail_menu checks first to see if the pages have already been scraped. This makes things slower.  
 2) There's not much to do with the listings yet, other than look at text descriptions.  
 3) There's only the two museums. 
+4) I haven't written or run any tests. 
+5) It's not yet deployed to RubyGems. This is still very much a version 0.1.0. Probably 0.0.1, but I'll burn that bridge when I come to it. 
 
 
 
