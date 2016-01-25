@@ -12,8 +12,37 @@ To add a museum, you need to do a couple things (at least as of right now):
       --URL for the main list of exhibitions  
       --the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
       --the CSS for getting the exhibition's description from each exhibition's page    
-  2) The main scraper usually isn't good enough. This is where Scraper#parse comes in: 
+  2) The main scraper usually isn't good enough. This is where Scraper#parse comes in:  
       --create a parse method that deals with whatever Nokogiri::HTML(open(URL)).css(CSS) returns. Name it appropriately.  
+      --Sometimes, you need to go even further. I just created a helper method to clean up the Guggenheim's listings:  
+      {% highlight ruby %}
+      def self.parse_gugg(nodeset)
+        guggs = nodeset.collect {|ex| 
+          {
+            :url => "http://www.guggenheim.org#{ex.at("a")["href"]}", 
+            :title => ex.css("h4").text,
+            :date => ex.css(".exh-dateline").text, 
+            :ongoing_date => ex.css(".row-text strong").text,
+            :online_date => ex.css(".offsite").text
+          }
+          }
+        self.trim_gugg(guggs)
+      end
+
+      def self.trim_gugg(array)   
+        array.each{|ex|   
+        if ex[:date].empty? 
+          if ex[:ongoing_date].empty?
+            ex[:date] = ex[:online_date]
+          else
+            ex[:date] = ex[:ongoing_date]
+          end
+        end
+        ex.delete(:online_date)
+        ex.delete(:ongoing_date)
+        }
+      end
+      {% endhighlight %}
       --go to Museum#parse, add another term to the case statement to select the right museum
   3) Then go down to Museum#get_exhib and do the same thing for the CSS 
   3) Add another item to lib/exhibitionist/cli #top_menu, first in the display up top, then add a "when"
