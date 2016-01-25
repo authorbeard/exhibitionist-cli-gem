@@ -65,7 +65,7 @@ To add a museum, you need to do a couple things (at least as of right now):
       {% endhighlight %}
       --go to Museum#parse, add another term to the case statement to select the right museum  
 
-  3) Then go down to Museum#get_exhib and do the same thing for each exhibition's description.
+  3) Then go down to Museum#get_exhib and do the same thing for each exhibition's description. In this case, you scrape at the top, then choose how to parse/trim/format/whatever within the case statement down below. I don't know for sure whether I still have a good reason for keeping this all separate when it comes to the main museum Exhibitions pages. I think it's because there's more stuff to sort through and select on those. But all I can vouch for at the moment is that I had to break the parse methods out to make sure I got all the info in nice arrays that would work with a single Museum.new method. 
 
 
 
