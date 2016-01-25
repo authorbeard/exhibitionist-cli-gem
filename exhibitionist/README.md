@@ -7,12 +7,15 @@ See below for instructions on adding a new museum to the current code.
 ### Wanna add a museum?
 
 To add a museum, you need to do a couple things (at least as of right now): 
-  1) Add the URL for its main exhibitions page to the URL constant contained in lib/exhibitionist/scraper.rb. Pick your own method of establishing 
-  2) Finding the right CSS selectors is a pain. So only do it once and save into the relevant locations:
-    a. the CSS constant hash in lib/exhibitionist/scraper
-      :main =>
-      :desc =>
-    b. the parser (see #4 below)
+
+  1) Add your museum to the MUSEUMS constant array:  
+      --URL for the main list of exhibitions  
+      --the CSS for Nokogiri to sort through and select the bits of info you want (see the attr_accessors in lib/exhibitionist/museum.rb for guidance)  
+      --the CSS for getting the exhibition's description from each exhibition's page    
+  2) The main scraper usually isn't good enough. This is where Scraper#parse comes in: 
+      --create a parse method that deals with whatever Nokogiri::HTML(open(URL)).css(CSS) returns. Name it appropriately.  
+      --go to Museum#parse, add another term to the case statement to select the right museum
+  3) Then go down to Museum#get_exhib and do the same thing for the CSS 
   3) Add another item to lib/exhibitionist/cli #top_menu, first in the display up top, then add a "when"
   statement down below. 
     --these need to follow the same pattern as the existing hashes: one for the main, one for exhibits

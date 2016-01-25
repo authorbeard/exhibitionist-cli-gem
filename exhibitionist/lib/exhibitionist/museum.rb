@@ -20,9 +20,14 @@ class Museum
       Scraper.parse_bk(nodeset)
     when "guggenheim"
       Scraper.parse_gugg(nodeset)
-
     end
+  end
 
+  def build_exhibits(array, css)
+    @exhibits = []
+    array.each{|ex| 
+      @exhibits << Exhibit.new(ex, self, css)
+    }
   end
 
   def display_exhibits
@@ -42,13 +47,6 @@ class Museum
     end
   end
 
-
-  def build_exhibits(array, css)
-    @exhibits = []
-    array.each{|ex| 
-      @exhibits << Exhibit.new(ex, self, css)
-    }
-  end
 
   def self.display_all
     @@all.each_with_index{|m, i| 
