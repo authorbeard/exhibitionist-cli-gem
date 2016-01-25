@@ -60,14 +60,9 @@ To add a museum, you need to do a couple things (at least as of right now):
 
 ### Current issues: 
 
-1) No way to list all of the exhibits. 
-2) Need to generate list of museums upon initialization rather than hard-coding it. 
-3) Need to make selection less dependent on hard-coding.
-4) Cannot browse through all relevant exhibition pages. 
-5) Too many steps needed to add a museum. 
-6) Can't do anything with the info (no email, add to ical, etc.)
-7) No tests written (ASS-BACKWARDS, I KNOW)
-
+1) I don't think either top_menu or detail_menu checks first to see if the pages have already been scraped. This makes things slower.  
+2) There's not much to do with the listings yet, other than look at text descriptions.  
+3) There's only the two museums. 
 
 
 
