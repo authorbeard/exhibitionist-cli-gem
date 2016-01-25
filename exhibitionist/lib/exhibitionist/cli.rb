@@ -27,6 +27,7 @@ class ExhibitionistCli
     puts "Hiya. At the moment, here's what you can do:\n\n"
     display_museums
     puts "#{MUSEUMS.size + 1}. See everything so far."
+    puts "#{MUSEUMS.size + 2}. See every museum's top exhibitions."
     puts "(there's more functionality to come)"
     puts "Or type q to quit."
     input = gets.strip
@@ -34,7 +35,7 @@ class ExhibitionistCli
         farewell
       elsif input.to_i == 0
         huh?
-      elsif input.to_i > MUSEUMS.size
+      elsif input.to_i == MUSEUMS.size + 1
         system("clear")
         fetching_message
         
@@ -47,6 +48,9 @@ class ExhibitionistCli
           system("clear")
           Museum.all.detect{|m| m.name == mus}.display_exhibits
         detail_menu
+
+      elsif input.to_i == MUSEUMS.size + 2
+        under_construction
 
       else 
         fetching_message
