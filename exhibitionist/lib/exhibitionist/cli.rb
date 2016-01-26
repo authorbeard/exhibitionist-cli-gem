@@ -41,8 +41,9 @@ class ExhibitionistCli
         
         MUSEUMS.each{|m|
           @current = Museum.new(m)
-        
-        current.display_exhibits}
+          current.display_exhibits
+          }
+
         puts "\n\nWhich museum do you wanna check out?"
           mus = gets.strip.downcase
           system("clear")
@@ -54,7 +55,7 @@ class ExhibitionistCli
 
       else 
         fetching_message
-        @current = Museum.new(MUSEUMS[input.to_i - 1])
+        Museum.all.detect{|m| m.name == MUSEUMS[input.to_i-1][:name]} || @current = Museum.new(MUSEUMS[input.to_i - 1])
         @museums << @current
         system("clear")
         @current.display_exhibits
@@ -96,6 +97,7 @@ class ExhibitionistCli
     what_now = gets.strip.downcase
       case what_now 
       when "b"
+        system("clear")
         @current.display_exhibits
         detail_menu
       when "m"
